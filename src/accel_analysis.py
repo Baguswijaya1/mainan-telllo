@@ -4,11 +4,13 @@ import sys
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+import accel_filter as acfil
 
 dt = 0.25
 accX_analysis = []
 accY_analysis = []
 time_stamps = []  # Store actual timestamps
+raw_data = []
 
 saber = Tello()
 
@@ -27,11 +29,24 @@ try:
             accX = saber.get_acceleration_x()
             accY = saber.get_acceleration_y()
             
+            # # apply moving average filter
+            # accFil_x = acfil.accel_filter(accX, raw_data)
+            # accFil_y = acfil.accel_filter(accY, raw_data)
+            # temp = saber.get_temperature()          
+            # if accFil_x is not None and accFil_y is not None:
+            #     time_stamps.append(current_time - begin)  
+            #     accX_analysis.append(accFil_x)
+            #     accY_analysis.append(accFil_y)
+            #     print(f'accX = {accFil_x}\naccY = {accFil_y}\ntemperature = {temp}\n')
+
+            # fetch without filter
             accX_analysis.append(accX)
             accY_analysis.append(accY)
-            time_stamps.append(current_time - begin)  # Relative time from start
+            time_stamps.append(current_time - begin)  
+            temp = saber.get_temperature()
+            print(f'accX = {accX}\naccY = {accY}\ntemperature = {temp}\n')
             
-            print(f'accX = {accX}\naccY = {accY}\n\n')
+
             next_fetch += dt 
 
 except KeyboardInterrupt:
