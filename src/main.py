@@ -1,5 +1,5 @@
 from djitellopy import Tello
-import connection, acquitition, manuever
+import connection
 import time
 import sys
 
@@ -10,7 +10,8 @@ tello = Tello()
 tello.RESPONSE_TIMEOUT = 10  # 10 detik timeout
 
 # connect to the drone with retry
-if not connection.connect_with_retry(tello):
+connected = connection.connect_with_retry(tello=tello)
+if not connected:
     print("cannot connect to drone. program terminated")
     sys.exit(1)
 
@@ -36,7 +37,7 @@ if start == "y":
         time.sleep(0.5)
 
         print("yaw")
-        tello.send_rc_control(0,0,0,40)
+        tello.send_rc_control(0,0,0,60)
         time.sleep(3)
         tello.send_rc_control(0,0,0,0)
         time.sleep(1)
@@ -46,6 +47,13 @@ if start == "y":
         time.sleep(4)
         tello.send_rc_control(0,0,0,0)
         time.sleep(0.5)
+
+        print("yaw")
+        tello.send_rc_control(0,0,0,60)
+        time.sleep(3)
+        tello.send_rc_control(0,0,0,0)
+        time.sleep(1)
+
         
         print("Landing...")
         tello.land()

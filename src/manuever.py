@@ -12,14 +12,13 @@ Kp_pitch = 1
 Ki_pitch = 0
 Kd_pitch = 0
 
-# Store PID state in dictionaries for each axis
 pid_state = {
     'roll': {'prev_error': 0, 'e_int': 0},
     'pitch': {'prev_error': 0, 'e_int': 0}
 }
 
-def PID_hoverX(drone, setpoint=0):
-    error = drone.get_speed_x() - setpoint
+def PID_hoverX(speedX, setpoint=0):
+    error = speedX - setpoint
     pid = pid_state['roll']
     pid['e_int'] += (pid['prev_error'] + error) / 2 * dt
     e_dot = (error - pid['prev_error']) / dt
@@ -27,8 +26,8 @@ def PID_hoverX(drone, setpoint=0):
     pid['prev_error'] = error
     return speed_out
 
-def PID_hoverY(drone, setpoint=0):
-    error = drone.get_speed_y() - setpoint
+def PID_hoverY(speedY, setpoint=0):
+    error = speedY - setpoint
     pid = pid_state['pitch']
     pid['e_int'] += (pid['prev_error'] + error) / 2 * dt
     e_dot = (error - pid['prev_error']) / dt
