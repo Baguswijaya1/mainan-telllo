@@ -1,4 +1,11 @@
 import numpy as np
+import time
+
+def speed_stream(master, freq):
+    now = time.monotonic()
+
+
+
 
 def accel_filter(current_accel, raw_data):
     raw_data.append(current_accel)

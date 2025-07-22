@@ -4,7 +4,7 @@ import sys
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-import accel_filter as acfil
+import acquitition
 
 dt = 0.25
 accX_analysis = []
@@ -30,8 +30,8 @@ try:
             accY = saber.get_acceleration_y()
             
             # # apply moving average filter
-            # accFil_x = acfil.accel_filter(accX, raw_data)
-            # accFil_y = acfil.accel_filter(accY, raw_data)
+            # accFil_x = acquitition.accel_filter(accX, raw_data)
+            # accFil_y = acquitition.accel_filter(accY, raw_data)
             # temp = saber.get_temperature()          
             # if accFil_x is not None and accFil_y is not None:
             #     time_stamps.append(current_time - begin)  
