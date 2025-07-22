@@ -30,6 +30,12 @@ def PID_hoverX(drone, setpoint=0):
 def PID_hoverY(drone, setpoint=0):
     error = drone.get_speed_y() - setpoint
     pid = pid_state['pitch']
+    pid['e_int'] += (pid['prev_error'] + error) / 2 * dt
+    e_dot = (error - pid['prev_error']) / dt
+    speed_out = Kp_roll * error + Ki_roll * pid['e_int'] + Kd_roll * e_dot
+    pid['prev_error'] = error
+    return speed_out    
+
 def hover(drone):
     drone.send_rc_control(PID_hoverX(drone), PID_hoverY(drone), 0, 0)
 

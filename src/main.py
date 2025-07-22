@@ -10,14 +10,13 @@ tello = Tello()
 tello.RESPONSE_TIMEOUT = 10  # 10 detik timeout
 
 # connect to the drone with retry
-can_connect = connection.connect_with_retry(tello)
-if not can_connect:
+if not connection.connect_with_retry(tello):
     print("cannot connect to drone. program terminated")
     sys.exit(1)
 
 # take off, wait, land
-start_in = input('start? (y/n): ')
-if start_in == "y":
+start = input('start? (y/n): ')
+if start == "y":
     try:
         print("Takeoff...")
         tello.takeoff()
