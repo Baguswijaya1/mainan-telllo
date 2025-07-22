@@ -39,22 +39,36 @@ def PID_hoverY(drone, setpoint=0):
 def hover(drone):
     drone.send_rc_control(PID_hoverX(drone), PID_hoverY(drone), 0, 0)
 
-def go_forward(drone, fwd_speed):
+def stop(drone):
+    drone.send_rc_control(0,0,0,0)
+
+def go_forward(drone, fwd_speed, time):
     drone.send_rc_control(PID_hoverX(drone), fwd_speed, 0, 0)
+    time.sleep(time)
+    stop(drone)
 
-def go_backward(drone, bck_speed):
+def go_backward(drone, bck_speed, time):
     drone.send_rc_control(PID_hoverX(drone), -bck_speed, 0, 0)
+    time.sleep(time)
+    stop(drone)
 
-def go_right(drone, r_speed):
+def go_right(drone, r_speed, time):
     drone.send_rc_control(r_speed, PID_hoverY(drone), 0, 0)
+    time.sleep(time)
+    stop(drone)
 
-def go_left(drone, l_speed):
+def go_left(drone, l_speed, time):
     drone.send_rc_control(-l_speed, PID_hoverY(drone), 0, 0)
+    time.sleep(time)
+    stop(drone)
 
-def go_right(drone, r_speed):
+def go_right(drone, r_speed, time):
     drone.send_rc_control(r_speed, PID_hoverY(), 0, 0)
+    time.sleep(time)
+    stop(drone)
 
-def go_left(drone, l_speed):
+def go_left(drone, l_speed, time):
     drone.send_rc_control(-l_speed, PID_hoverY(), 0, 0)
-
+    time.sleep(time)
+    stop(drone)
     
