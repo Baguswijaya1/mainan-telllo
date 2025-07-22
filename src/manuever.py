@@ -12,32 +12,38 @@ Kp_pitch = 1
 Ki_pitch = 0
 Kd_pitch = 0
 
-prev_error_ = 0
+# Store PID state in dictionaries for each axis
+pid_state = {
+    'roll': {'prev_error': 0, 'e_int': 0},
+    'pitch': {'prev_error': 0, 'e_int': 0}
+}
 
-def PID_hoverX(setpoint=0):
-    error = Tello.get_speed_x() - setpoint
-    e_int = e_int + (prev_error + error)/2*dt
-    e_dot = (error + prev_error)/dt
-    speed_out = Kp_roll * error + Ki_roll * e_int + Kd_roll * e_dot
-    prev_error = error
+def PID_hoverX(drone, setpoint=0):
+    error = drone.get_speed_x() - setpoint
+    pid = pid_state['roll']
+    pid['e_int'] += (pid['prev_error'] + error) / 2 * dt
+    e_dot = (error - pid['prev_error']) / dt
+    speed_out = Kp_roll * error + Ki_roll * pid['e_int'] + Kd_roll * e_dot
+    pid['prev_error'] = error
     return speed_out
 
-def PID_hoverY(setpoint):
-    error = Tello.get_speed_y() - setpoint
-    e_int = e_int + (prev_error + error)/2*dt
-    e_dot = (error + prev_error)/dt
-    speed_out = Kp_pitch * error + Ki_pitch * e_int + Kd_pitch * e_dot
-    prev_error = error
-    return speed_out
-
+def PID_hoverY(drone, setpoint=0):
+    error = drone.get_speed_y() - setpoint
+    pid = pid_state['pitch']
 def hover(drone):
-    drone.send_rc_control(PID_hoverX(), PID_hoverY(), 0, 0)
-    
-def go_forward(drone, fwd_speed)
-    drone.send_rc_control(PID_hoverX(), fwd_speed, 0, 0)
+    drone.send_rc_control(PID_hoverX(drone), PID_hoverY(drone), 0, 0)
+
+def go_forward(drone, fwd_speed):
+    drone.send_rc_control(PID_hoverX(drone), fwd_speed, 0, 0)
 
 def go_backward(drone, bck_speed):
-    drone.send_rc_control(PID_hoverX(), -bck_speed, 0, 0)
+    drone.send_rc_control(PID_hoverX(drone), -bck_speed, 0, 0)
+
+def go_right(drone, r_speed):
+    drone.send_rc_control(r_speed, PID_hoverY(drone), 0, 0)
+
+def go_left(drone, l_speed):
+    drone.send_rc_control(-l_speed, PID_hoverY(drone), 0, 0)
 
 def go_right(drone, r_speed):
     drone.send_rc_control(r_speed, PID_hoverY(), 0, 0)

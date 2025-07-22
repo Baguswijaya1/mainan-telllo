@@ -9,6 +9,8 @@ import acquitition
 dt = 0.25
 accX_analysis = []
 accY_analysis = []
+spdX_analysis = []
+spdY_analysis = []
 time_stamps = []  # Store actual timestamps
 raw_data = []
 
@@ -28,6 +30,8 @@ try:
             current_time = time.time()
             accX = saber.get_acceleration_x()
             accY = saber.get_acceleration_y()
+            spdX = saber.get_speed_x()
+            spdY = saber.get_speed_y()
             
             # # apply moving average filter
             # accFil_x = acquitition.accel_filter(accX, raw_data)
@@ -42,9 +46,12 @@ try:
             # fetch without filter
             accX_analysis.append(accX)
             accY_analysis.append(accY)
+            spdX_analysis.append(spdX)
+            spdY_analysis.append(spdY)
             time_stamps.append(current_time - begin)  
             temp = saber.get_temperature()
-            print(f'accX = {accX}\naccY = {accY}\ntemperature = {temp}\n')
+            print(f'accX = {accX}\naccY = {accY}\ntemperature = {temp}')
+            print(f'spdX = {spdX}\nspdY = {spdY}\n')
             
 
             next_fetch += dt 
@@ -56,20 +63,34 @@ except KeyboardInterrupt:
     if len(accX_analysis) > 0 and len(time_stamps) > 0:
         plt.figure(figsize=(12, 5))
 
-        plt.subplot(1,2,1)
+        plt.subplot(2,2,1)
         plt.grid()
         plt.title('X Acceleration vs Time')
         plt.xlabel('Time (seconds)')
         plt.ylabel('Acceleration (cm/s²)')
         plt.plot(time_stamps, accX_analysis, 'b.-')
 
-        plt.subplot(1,2,2)
+        plt.subplot(2,2,2)
         plt.grid()
         plt.title('Y Acceleration vs Time')
         plt.xlabel('Time (seconds)')
         plt.ylabel('Acceleration (cm/s²)')
         plt.plot(time_stamps, accY_analysis, 'r.-')
         
+        plt.subplot(2,2,3)
+        plt.grid()
+        plt.title('x speed vs Time')
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('speed (cm/s)')
+        plt.plot(time_stamps, spdX_analysis, 'r.-')
+        
+        plt.subplot(2,2,4)
+        plt.grid()
+        plt.title('y speed vs Time')
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('speed (cm/s)')
+        plt.plot(time_stamps, spdY_analysis, 'r.-')
+
         plt.tight_layout()
         plt.show()
         
